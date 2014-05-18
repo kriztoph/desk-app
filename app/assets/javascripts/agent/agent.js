@@ -13,7 +13,7 @@ angular.module("deskApp", [
     }])
 
     .controller('AgentCtrl', ['$scope', function($scope){
-
+      console.log('agent controller');
     }])
 ;
 
