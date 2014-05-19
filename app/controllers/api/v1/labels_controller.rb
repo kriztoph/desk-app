@@ -4,24 +4,15 @@ module Api
       respond_to :json
 
       def index
-        response = @access_token.get("#{API_ENDPOINT}/api/v2/labels")
+        labels = Desk::Label.list
 
-        return head :error if response.nil?
+        return head :error if labels.nil?
 
-        labels = JSON.parse(response.body)
         render json: labels
       end
 
       def create
-        body = {
-            name: params[:label][:name]
-        }
-
-        response = @access_token.post(
-            "#{API_ENDPOINT}/api/v2/labels",
-            body.to_json,
-            { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
-
+        response = Desk::Label.create(params[:label][:name])
         head :ok
       end
     end

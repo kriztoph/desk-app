@@ -1,4 +1,4 @@
-require 'oauth/request_proxy/typhoeus_request'
+require 'desk/desk'
 
 module Api
   module V1
@@ -8,14 +8,10 @@ module Api
       def index
         filter_id = params[:filter_id]
         if filter_id
-          response = @access_token.get("#{API_ENDPOINT}/api/v2/filters/#{filter_id}/cases")
+          cases = Desk::Case.list_by_filter(filter_id)
         else
-          response = @access_token.get("#{API_ENDPOINT}/api/v2/cases")
+          cases = Desk::Case.list
         end
-
-        return head :error if response.nil?
-
-        cases = JSON.parse(response.body)
 
         render json: cases
       end
@@ -23,47 +19,19 @@ module Api
       def update
         new_label = params[:new_label]
         label_ids = params[:label_ids] || []
-        labels_response = @access_token.get("#{API_ENDPOINT}/api/v2/labels")
-        labels = JSON.parse(labels_response.body.gsub('_embedded', 'embedded'))
+        case_id = params[:id]
 
-        name = labels['embedded']['entries'].select do |label|
-          label['name'] == new_label
-        end
+        response = Desk::Case.add_label(case_id, label_ids, new_label)
 
-        body = {
-            name: new_label
-        }
-
-        response = @access_token.post(
-            "#{API_ENDPOINT}/api/v2/labels",
-            body.to_json,
-            { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
-
-        label_id = JSON.parse(response.body)['id']
-        label_ids.push(label_id)
-
-        oauth_params = {:consumer => @consumer, :token => @access_token}
-        hydra = Typhoeus::Hydra.new
-        req = Typhoeus::Request.new(
-            "#{API_ENDPOINT}/api/v2/cases/#{params[:id]}",
-            method: :patch,
-            body: {labels: [new_label]}.to_json
-        )
-        oauth_helper = OAuth::Client::Helper.new(req, oauth_params.merge(:request_uri => "#{API_ENDPOINT}/api/v2/cases/#{params[:id]}"))
-        req.options[:headers].merge!({"Authorization" => oauth_helper.header}) # Signs the request
-        hydra.queue(req)
-        hydra.run
-
-        head :ok if req.response.code == 200
+        head :ok if response.code == 200
       end
 
       def show
-        response = @access_token.get("#{API_ENDPOINT}/api/v2/cases/#{params[:id]}")
-        return head :error if response.nil?
+        cse = Desk::Case.get(params[:id])
 
-        c = JSON.parse(response.body)
+        return head :error if cse.nil?
 
-        render json: c
+        render json: cse
       end
     end
   end

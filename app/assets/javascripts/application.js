@@ -121,6 +121,8 @@ angular.module("deskApp", [
         label.$create().then(function(){
           $scope.updateLabels();
         })
+
+        $scope.label.name = '';
       }
 
       $scope.updateLabels();

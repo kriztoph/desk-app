@@ -4,11 +4,10 @@ module Api
       respond_to :json
 
       def index
-        response = @access_token.get("#{API_ENDPOINT}/api/v2/filters")
+        filters = Desk::Filter.list
 
-        return head :error if response.nil?
+        return head :error if filters.nil?
 
-        filters = JSON.parse(response.body)
         render json: filters
       end
     end
