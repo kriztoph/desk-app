@@ -17,7 +17,7 @@ module Desk
       def add_label(case_id, label_ids, new_label)
         labels = Desk::Label.list
 
-        name = labels['embedded']['entries'].select do |label|
+        name = labels['_embedded']['entries'].select do |label|
           label['name'] == new_label
         end
 
