@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         resources :cases, only: :index
       end
       resources :cases
+      resources :labels, only: [:create, :index]
     end
   end
 end

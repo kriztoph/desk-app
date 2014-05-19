@@ -15,7 +15,9 @@
 //= require angular-ui-router
 //= require common/services/case
 //= require common/services/filter
+//= require common/services/label
 //= require agent/agent
 //= require cases/cases
+//= require labels/labels
 
 
