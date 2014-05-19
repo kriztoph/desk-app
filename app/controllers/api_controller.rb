@@ -8,7 +8,7 @@ class ApiController < ActionController::Base
   private
 
   def desk_auth
-    consumer = OAuth::Consumer.new(
+    @consumer = OAuth::Consumer.new(
         'f3VhljkR9R51UW7bzPHx',
         'DLYPEekjTBJp2Ok2oqP8ZDTKbUsTultzVefcuWba',
         site: "https://krizinc.desk.com",
@@ -16,7 +16,7 @@ class ApiController < ActionController::Base
     )
 
     @access_token = OAuth::AccessToken.from_hash(
-        consumer,
+        @consumer,
         oauth_token: 'YUEwGDZWDNWr6lwXr4Ok',
         oauth_token_secret: 'TxLmbOJ9aHHYGyYWP4F9ISpvBz5YzzW8AsbfSRs3'
     )

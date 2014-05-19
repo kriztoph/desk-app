@@ -36,7 +36,11 @@ angular.module("deskApp", [
 
     .factory('Case', ['$resource', function($resource) {
       return $resource('/api/v1/cases.json', {}, {
-        get: { method: 'GET', isArray: false }
+        list: { method: 'GET', isArray: false},
+        get: { method: 'GET', params: {id: '@id'}, url: '/api/v1/cases/:id' },
+        update: { method: 'PUT',
+                  params: { id: '@id', new_label: '@newLabel'},
+                  url: '/api/v1/cases/:id'}
       });
     }])
 
@@ -56,13 +60,19 @@ angular.module("deskApp", [
       });
     }])
 
-    .controller('CasesCtrl', ['$scope', 'Case', 'Filter', function($scope, Case, Filter){
-      Case.get().$promise.then(function(result){
-        $scope.cases = result._embedded.entries;
-      });
+    .controller('CasesCtrl', ['$scope', '$filter', 'Case', 'Filter', 'Label', function($scope, $filter, Case, Filter, Label){
+      $scope.updateCases = function(){
+        Case.list().$promise.then(function(result){
+          $scope.cases = result._embedded.entries;
+        });
+      }
 
       Filter.get().$promise.then(function(result){
         $scope.filters = result._embedded.entries;
+      });
+
+      Label.get().$promise.then(function(result){
+        $scope.labels = result._embedded.entries;
       });
 
       $scope.filterCases = function(filter){
@@ -76,6 +86,24 @@ angular.module("deskApp", [
           }
         })
       };
+
+      $scope.addLabel = function(c){
+        var label = $filter('filter')($scope.labels, function(value){
+          return value.name == $scope.newLabel;
+        });
+
+        var newLabel = this.newLabel;
+
+        Case.get({id: c.id}).$promise.then(function(result){
+          result.$update({new_label: newLabel}).then(function(result){
+            $scope.updateCases();
+          })
+        });
+
+        $scope.newLabel = '';
+      }
+
+      $scope.updateCases();
     }])
 
     .controller('LabelsCtrl', ['$scope', 'Label', function($scope, Label){

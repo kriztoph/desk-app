@@ -1,16 +1,43 @@
-Filters:
-<ul>
-    <li data-ng-repeat="filter in filters" data-ng-click="filterCases(filter)">
-        {{ filter.name }}
-    </li>
-</ul>
+<span class="span3">
+    <ul class="unstyled">
+        <button type="button" class="btn btn-default btn-lg btn-block" data-ng-repeat="filter in filters" data-ng-click="filterCases(filter)">
+            {{ filter.name }}
+        </button>
+    </ul>
+</span>
+<span class="span9">
 
 <h3>Cases</h3>
-<div data-ng-show="no_cases">
-    No cases matching filter.
-</div>
-<ul>
-    <li data-ng-repeat="case in cases | filter:caseFilter ">
-        {{ case.subject }}
-    </li>
-</ul>
+    <div data-ng-show="no_cases">
+        No cases matching filter.
+    </div>
+
+    <table class="table">
+        <tr>
+            <td>Subject</td>
+            <td>Status</td>
+            <td>Priority</td>
+            <td>Labels</td>
+        </tr>
+        <tr data-ng-repeat="case in cases | filter:caseFilter">
+          <td>
+            <span style="font-size: 14pt;">{{ case.subject }}</span>
+            </br>
+            <small>{{ case.blurb }}</small>
+          </td>
+          <td>{{ case.status }}</td>
+          <td>{{ case.priority }}</td>
+          <td>
+            <span style="margin-right: 5px;" class="label label-primary" data-ng-repeat="label in case.labels">
+              {{ label }}
+            </span>
+              <form ng-submit="addLabel(case)">
+                  <input type="text" data-ng-model="newLabel" class="form-control input-sm" style="height:15px; width:80px; font-size:9pt; margin-top: 3px;">
+              </form>
+
+          </td>
+        </tr>
+    </table>
+</span>
+
+

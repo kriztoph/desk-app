@@ -6,7 +6,9 @@ gem 'rails', '4.1.1'
 gem 'pg'
 
 #DeskApi uses oauth1
-gem 'oauth'
+gem 'oauth', git: 'git://github.com/cfeller/oauth-ruby.git'
+
+gem 'typhoeus'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
