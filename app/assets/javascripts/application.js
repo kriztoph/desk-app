@@ -61,6 +61,8 @@ angular.module("deskApp", [
     }])
 
     .controller('CasesCtrl', ['$scope', '$filter', 'Case', 'Filter', 'Label', function($scope, $filter, Case, Filter, Label){
+      $scope.flash = {};
+
       $scope.updateCases = function(){
         Case.list().$promise.then(function(result){
           $scope.cases = result._embedded.entries;
@@ -77,6 +79,7 @@ angular.module("deskApp", [
 
       $scope.filterCases = function(filter){
         filter_id = filter._links.self.href.replace('/api/v2/filters/', '')
+        $scope.filter_name = filter.name;
         Filter.cases({filter_id: filter_id}).$promise.then(function(result){
           $scope.cases = result._embedded.entries;
           if ($scope.cases.length == 0) {
@@ -108,6 +111,7 @@ angular.module("deskApp", [
 
     .controller('LabelsCtrl', ['$scope', 'Label', function($scope, Label){
       $scope.label = {};
+      $scope.flash = {};
 
       $scope.updateLabels = function(){
         Label.get().$promise.then(function(result){
@@ -120,6 +124,9 @@ angular.module("deskApp", [
         label.name = $scope.label.name;
         label.$create().then(function(){
           $scope.updateLabels();
+          $scope.flash = {
+            message: 'Successfully added label.'
+          }
         })
 
         $scope.label.name = '';

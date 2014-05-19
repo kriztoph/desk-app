@@ -7,8 +7,15 @@
 </span>
 <span class="span9">
 
+<div data-ng-show="flash.message">
+    <div class="alert alert-success">
+        {{ flash.message }}
+    </div>
+</div>
+
 <h3>Cases</h3>
-    <div data-ng-show="no_cases">
+<h5>{{ filter_name }}</h5>
+    <div data-ng-show="no_cases" style="margin-bottom: 10px; font-size: 14pt;">
         No cases matching filter.
     </div>
 

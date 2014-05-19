@@ -11,6 +11,11 @@
 </span>
 
 <span class="span9">
+    <div data-ng-show="flash.message">
+        <div class="alert alert-success">
+            {{ flash.message }}
+        </div>
+    </div>
     <h3>Labels</h3>
     <ul class="unstyled">
         <li data-ng-repeat="label in labels">

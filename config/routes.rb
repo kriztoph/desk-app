@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'agent#index' 
+  root :to => redirect('/agent')
 
   get  '/desk/templates/*template_path' => 'desk_templates#find'
   get '/agent' => 'agent#index'
