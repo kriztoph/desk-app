@@ -1,8 +1,9 @@
 <span class="span3">
-    <ul class="unstyled">
-        <button type="button" class="btn btn-default btn-lg btn-block" data-ng-repeat="filter in filters" data-ng-click="filterCases(filter)">
-            {{ filter.name }}
-        </button>
+    <h5>Case Filters</h5>
+    <ul class="nav nav-pills nav-stacked">
+        <li data-ng-repeat="filter in filters" data-ng-class="filterActive(filter)">
+            <a data-ng-click="filterCases(filter)">{{ filter.name }}</a>
+        </li>
     </ul>
 </span>
 <span class="span9">
@@ -14,34 +15,35 @@
 </div>
 
 <h3>Cases</h3>
-<h5>{{ filter_name }}</h5>
+<h5>{{ filter_name }} <span class="badge">{{ cases.length }}</span></h5>
     <div data-ng-show="no_cases" style="margin-bottom: 10px; font-size: 14pt;">
         No cases matching filter.
     </div>
 
-    <table class="table">
+    <table class="table table-striped">
         <tr>
             <td>Subject</td>
             <td>Status</td>
             <td>Priority</td>
             <td>Labels</td>
+            <td></td>
         </tr>
         <tr data-ng-repeat="case in cases | filter:caseFilter">
           <td>
-            <span style="font-size: 14pt;">{{ case.subject }}</span>
-            </br>
-            <small>{{ case.blurb }}</small>
+            <span style="font-size: 12pt;">{{ case.subject }}</span>
           </td>
-          <td>{{ case.status }}</td>
+          <td><span class="label" data-ng-class="caseClass(case)">{{ case.status }}</span></td>
           <td>{{ case.priority }}</td>
           <td>
             <span style="margin-right: 5px;" class="label label-primary" data-ng-repeat="label in case.labels">
               {{ label }}
             </span>
-              <form ng-submit="addLabel(case)">
-                  <input type="text" data-ng-model="newLabel" class="form-control input-sm" style="height:15px; width:80px; font-size:9pt; margin-top: 3px;">
+          </td>
+          <td>
+              <form ng-submit="addLabel(case)" class="form-inline">
+                  <input type="text" placeholder="add label.." data-ng-model="newLabel" class="form-control input-sm" style="height:15px; width:80px; font-size:9pt;"></br>
+                  <label style="color:gray; font-size: 8pt;" data-ng-show="case.saving">saving...</label>
               </form>
-
           </td>
         </tr>
     </table>

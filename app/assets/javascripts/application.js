@@ -62,6 +62,11 @@ angular.module("deskApp", [
 
     .controller('CasesCtrl', ['$scope', '$filter', 'Case', 'Filter', 'Label', function($scope, $filter, Case, Filter, Label){
       $scope.flash = {};
+      $scope.filterActive = function(filter){
+        if (filter.name == $scope.filter_name) {
+          return 'active';
+        }
+      }
 
       $scope.updateCases = function(){
         Case.list().$promise.then(function(result){
@@ -91,6 +96,7 @@ angular.module("deskApp", [
       };
 
       $scope.addLabel = function(c){
+        c.saving = true;
         var label = $filter('filter')($scope.labels, function(value){
           return value.name == $scope.newLabel;
         });
@@ -107,6 +113,21 @@ angular.module("deskApp", [
       }
 
       $scope.updateCases();
+
+      $scope.caseClass = function(c) {
+        switch(c.status) {
+          case 'open':
+            return 'label-success';
+            break;
+          case 'new':
+            return 'label-primary';
+            break;
+          case 'pending':
+            return 'label-warning';
+            break;
+
+        }
+      }
     }])
 
     .controller('LabelsCtrl', ['$scope', 'Label', function($scope, Label){

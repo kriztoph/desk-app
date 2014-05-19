@@ -4,7 +4,6 @@
         <fieldset>
             <label>Label Name</label>
             <input data-ng-model="label.name" type="text" placeholder="Enter label name...">
-            </br>
             <button data-ng-click="createLabel()" type="submit" class="btn">Create</button>
         </fieldset>
     </form>
@@ -19,7 +18,7 @@
     <h3>Labels</h3>
     <ul class="unstyled">
         <li data-ng-repeat="label in labels">
-            <span class="label">{{ label.name }}</span>
+            <span style="font-size: 11pt;" class="label">{{ label.name }}</span>
         </li>
     </ul>
 </span>
