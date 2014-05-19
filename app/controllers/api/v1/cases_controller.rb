@@ -22,7 +22,7 @@ module Api
 
       def update
         new_label = params[:new_label]
-        label_ids = params[:label_ids]
+        label_ids = params[:label_ids] || []
         labels_response = @access_token.get("#{API_ENDPOINT}/api/v2/labels")
         labels = JSON.parse(labels_response.body.gsub('_embedded', 'embedded'))
 
