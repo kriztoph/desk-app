@@ -6,8 +6,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get '/filters' => 'filters#index', format: :json
-      get '/cases' => 'cases#index', format: :json
+      resources :filters, format: :json, only: :index do
+        resources :cases, only: :index
+      end
+      resources :cases
     end
   end
 end

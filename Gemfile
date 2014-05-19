@@ -32,6 +32,13 @@ gem 'angularjs-rails'
 gem 'therubyracer' 
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+group :development, :test do
+  gem 'rspec-rails'
+end
+
+group :test do
+  gem 'webmock'
+end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

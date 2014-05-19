@@ -1,7 +1,16 @@
-<h3>Cases</h3>
-
+Filters:
 <ul>
-    <li data-ng-repeat="case in cases">
+    <li data-ng-repeat="filter in filters" data-ng-click="filterCases(filter)">
+        {{ filter.name }}
+    </li>
+</ul>
+
+<h3>Cases</h3>
+<div data-ng-show="no_cases">
+    No cases matching filter.
+</div>
+<ul>
+    <li data-ng-repeat="case in cases | filter:caseFilter ">
         {{ case.subject }}
     </li>
 </ul>
