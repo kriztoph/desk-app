@@ -6,21 +6,21 @@ module Desk
     class << self
       def list
         response = Desk.access_token.get("#{Desk.site}/api/v2/cases")
+
+        Desk.raise_error(response.body) unless response.code.to_i == 200
+
         JSON.parse(response.body)
       end
 
       def list_by_filter(filter_id)
         response = Desk.access_token.get("#{Desk.site}/api/v2/filters/#{filter_id}/cases")
+
+        Desk.raise_error(response.body) unless response.code.to_i == 200
+
         JSON.parse(response.body)
       end
 
       def add_label(case_id, label_ids, new_label)
-        labels = Desk::Label.list
-
-        name = labels['_embedded']['entries'].select do |label|
-          label['name'] == new_label
-        end
-
         body = {
             name: new_label
         }
@@ -45,16 +45,12 @@ module Desk
         hydra.queue(req)
         hydra.run
 
-        req.response
+        response = req.response
       end
 
       def get(id)
         response = Desk.access_token.get("#{Desk.site}/api/v2/cases/#{id}")
         JSON.parse(response.body)
-      end
-
-      def update
-
       end
     end
   end

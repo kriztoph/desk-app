@@ -12,7 +12,10 @@ module Api
       end
 
       def create
-        response = Desk::Label.create(params[:label][:name])
+        name = params[:label][:name]
+        return head :bad_request unless name
+        response = Desk::Label.create(name)
+
         head :ok
       end
     end

@@ -1,3 +1,5 @@
+require 'desk/desk_api_error'
+
 module Desk
   mattr_accessor :consumer_key
   mattr_accessor :consumer_secret
@@ -20,5 +22,9 @@ module Desk
         site: "https://krizinc.desk.com",
         scheme: :header
     )
+  end
+
+  def self.raise_error(response)
+    raise Desk::DeskApiError.new(self), "#{JSON.parse(response)}"
   end
 end
