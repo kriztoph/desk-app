@@ -85,6 +85,7 @@ angular.module("deskApp", [
       $scope.filterCases = function(filter){
         filter_id = filter._links.self.href.replace('/api/v2/filters/', '')
         $scope.filter_name = filter.name;
+        $scope.currentFilter = filter;
         Filter.cases({filter_id: filter_id}).$promise.then(function(result){
           $scope.cases = result._embedded.entries;
           if ($scope.cases.length == 0) {
@@ -105,7 +106,11 @@ angular.module("deskApp", [
 
         Case.get({id: c.id}).$promise.then(function(result){
           result.$update({new_label: newLabel}).then(function(result){
-            $scope.updateCases();
+            if ($scope.currentFilter) {
+              $scope.filterCases($scope.currentFilter)
+            } else {
+              $scope.updateCases();
+            }
           })
         });
 
